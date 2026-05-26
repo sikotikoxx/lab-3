@@ -22,24 +22,24 @@ public class Experimento
                 ArrayList<Song> dbOriginal = DataGenerator.generateDataBase(n, seed);
                 // INSERTION
                 SongDataBase db1 = new SongDataBase(new ArrayList<>(dbOriginal));
-                long start1 = System.nanoTime(); // inicia cronómetro nativo
+                StopwatchCPU timer1 = new StopwatchCPU();
                 db1.ordenarPorAlgoritmo("insertionSort", "plays");
-                double tInsertion = (System.nanoTime() - start1) / 1_000_000_000.0; // pasa a segundos (ahi vemos si lo pasamos a milisegundos)
+                double tInsertion = timer1.elapsedTime();
                 // SELECTION
                 SongDataBase db2 = new SongDataBase(new ArrayList<>(dbOriginal));
-                long start2 = System.nanoTime();
+                StopwatchCPU timer2 = new StopwatchCPU();
                 db2.ordenarPorAlgoritmo("selectionSort", "plays");
-                double tSelection = (System.nanoTime() - start2) / 1_000_000_000.0;
+                double tSelection = timer2.elapsedTime();
                 // MERGE
                 SongDataBase db3 = new SongDataBase(new ArrayList<>(dbOriginal));
-                long start3 = System.nanoTime();
+                StopwatchCPU timer3 = new StopwatchCPU();
                 db3.ordenarPorAlgoritmo("mergeSort", "plays");
-                double tMerge = (System.nanoTime() - start3) / 1_000_000_000.0;
+                double tMerge = timer3.elapsedTime();
                 // QUICK
                 SongDataBase db4 = new SongDataBase(new ArrayList<>(dbOriginal));
-                long start4 = System.nanoTime();
+                StopwatchCPU timer4 = new StopwatchCPU();
                 db4.ordenarPorAlgoritmo("quickSort", "plays");
-                double tQuick = (System.nanoTime() - start4) / 1_000_000_000.0;
+                double tQuick = timer4.elapsedTime();
                 out.println(i + "," + tInsertion + "," + tSelection + "," + tMerge + "," + tQuick);
             }
             out.close();
@@ -51,32 +51,32 @@ public class Experimento
         for (int n : sizes)
         {
             Out out = new Out("exp2_resultados_" + n + ".csv");
-            out.println("instancia,topglobal,t_lineal,t_binaria");
-            int numTopGlobales = n / 50;
-            String[] TopglobalesBuscados = {
-                "TopGlobal_0",
-                "TopGlobal_" + (n / 200),
-                "TopGlobal_" + (n / 100),
-                "TopGlobal_" + (3 * n / 200),
-                "TopGlobal_" + (numTopGlobales - 1)
+            out.println("instancia,artista,t_lineal,t_binaria");
+            int numArtistas = n / 50;
+            String[] artistasBuscados = {
+                    "Artista_0",
+                    "Artista_" + (n / 200),
+                    "Artista_" + (n / 100),
+                    "Artista_" + (3 * n / 200),
+                    "Artista_" + (numArtistas - 1)
             };
             for (int i = 0; i < 100; i++)
             {
                 long seed = n + i;
                 ArrayList<Song> dbOriginal = DataGenerator.generateDataBase(n, seed);
-                for (String artist : TopglobalesBuscados)
+                for (String artist : artistasBuscados)
                 {
                     // búsqueda Lineal
                     SongDataBase dbLineal = new SongDataBase(dbOriginal);
-                    long startLineal = System.nanoTime();
+                    StopwatchCPU timerLineal = new StopwatchCPU();
                     for (int k = 0; k < 1000; k++) {dbLineal.sequentialSearch(artist);}
-                    double tLineal = (System.nanoTime() - startLineal) / 1_000_000_000.0;
-                    // búsqueda Binaria
+                    double tLineal = timerLineal.elapsedTime();
+                    // Búsqueda Binaria
                     SongDataBase dbBinaria = new SongDataBase(new ArrayList<>(dbOriginal));
                     dbBinaria.ordenarPorAlgoritmo("quickSort", "artist"); // ordena primero
-                    long startBinaria = System.nanoTime();
+                    StopwatchCPU timerBinaria = new StopwatchCPU();
                     for (int k = 0; k < 1000; k++) {dbBinaria.binarySearch(artist);}
-                    double tBinaria = (System.nanoTime() - startBinaria) / 1_000_000_000.0;
+                    double tBinaria = timerBinaria.elapsedTime();
                     out.println(i + "," + artist + "," + tLineal + "," + tBinaria);
                 }
             }
