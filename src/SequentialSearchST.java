@@ -1,3 +1,4 @@
+// Ariel Olea y Santiago González
 import java.util.ArrayList;
 public class SequentialSearchST
 {
