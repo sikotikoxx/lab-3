@@ -1,3 +1,4 @@
+// Ariel Olea y Santiago González
 /******************************************************************************
  *  Compilation:  javac StdRandom.java
  *  Execution:    java StdRandom
